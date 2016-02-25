@@ -6,25 +6,25 @@ using System.Data.SqlClient;
 
 namespace DatabaseAccessLayers
 {
-    public class DatabaseAccessLayer
+    public class DatabaseAccessLayer: IDatabaseAccess
     {
-        #region Fields
-        private readonly string _connectionString;
-        private readonly string _databaseName;
-        #endregion
-
-
         #region  Constructors & Destructor
         public DatabaseAccessLayer(string connectionString, string databaseName)
         {
-            _connectionString = connectionString;
-            _databaseName = databaseName;
+            ConnectionString = connectionString;
+            DatabaseName = databaseName;
         }
 
         public DatabaseAccessLayer(string connectionString)
         {
-            _connectionString = connectionString;
+            ConnectionString = connectionString;
         }
+        #endregion
+
+
+        #region  Properties & Indexers
+        public string ConnectionString { get; set; }
+        public string DatabaseName { get; set; }
         #endregion
 
 
@@ -66,9 +66,9 @@ namespace DatabaseAccessLayers
 
         #region Implementation
         private string CreateConnectionString()
-            => string.IsNullOrEmpty(_databaseName)
-                   ? _connectionString
-                   : new SqlConnectionStringBuilder(_connectionString) { InitialCatalog = _databaseName }.ToString();
+            => string.IsNullOrEmpty(DatabaseName)
+                   ? ConnectionString
+                   : new SqlConnectionStringBuilder(ConnectionString) { InitialCatalog = DatabaseName }.ToString();
 
         private SqlConnection OpenConnection()
         {
